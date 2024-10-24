@@ -1,0 +1,49 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div *ngFor="let control of formConfig">
+      <label [for]="control.name">{{ control.label }}</label>
+  
+      <input
+        *ngIf="control.type === 'text'"
+        [id]="control.name"
+        [formControlName]="control.name"
+        type="text"
+      />
+  
+      <input
+        *ngIf="control.type === 'password'"
+        [id]="control.name"
+        [formControlName]="control.name"
+        type="password"
+      />
+  
+      <select
+        *ngIf="control.type === 'select'"
+        [id]="control.name"
+        [formControlName]="control.name"
+      >
+        <option *ngFor="let option of control.options" [value]="option">
+          {{ option }}
+        </option>
+      </select>
+  
+      <select
+        *ngIf="control.type === 'multiselect'"
+        [id]="control.name"
+        (change)="onSelectChange($event, control.name)"
+        multiple
+      >
+        <option *ngFor="let option of control.options" [value]="option">
+          {{ option }}
+        </option>
+      </select>
+  
+      <div *ngIf="form.get(control.name)?.invalid && form.get(control.name)?.touched">
+        <small *ngIf="form.get(control.name)?.errors?.['required']">
+          {{ control.label }} is required.
+        </small>
+      </div>
+    </div>
+  
+    <button type="submit" [disabled]="form.invalid">Submit</button>
+  </form>
+  
